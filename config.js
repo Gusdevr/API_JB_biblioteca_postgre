@@ -8,6 +8,12 @@ module.exports = {
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
         dialect: 'postgres',
+        dialectOptions: {
+            ssl: {
+                require: true, // SSL é obrigatório no Neon
+                rejectUnauthorized: false, // Aceitar certificados autoassinados
+            },
+        },
     },
     server: {
         port: process.env.PORT || 3750,
