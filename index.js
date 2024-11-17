@@ -6,6 +6,7 @@ const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
 const bcrypt = require('bcrypt') 
+const { database, server } = require('./config');
 
 dotenv.config()
 
@@ -31,11 +32,11 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage })
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-    host: process.env.DB_HOST,
-    dialect: 'postgres',
-    port: process.env.DB_PORT,
-  });
+const sequelize = new Sequelize(database.name, database.user, database.password, {
+    host: database.host,
+    dialect: database.dialect,
+    port: database.port,
+});
   
 
   //conectar com o supabase
@@ -43,10 +44,9 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
   .then(() => console.log('Conexão com o banco Supabase estabelecida!'))
   .catch(err => console.error('Erro ao conectar ao banco:', err.message));
 
-
-  sequelize.sync({ alter: true }) 
-    .then(() => console.log('Banco sincronizado com sucesso!'))
-    .catch((err) => console.error('Erro ao sincronizar banco:', err));
+sequelize.sync({ alter: true })
+  .then(() => console.log('Banco sincronizado com sucesso!'))
+  .catch(err => console.error('Erro ao sincronizar banco:', err));
   
 
 
